@@ -22,7 +22,11 @@ public class PutoFood : MonoBehaviour {
 					GameObject gloria = GameObject.Find("Gloria");
 					gloria.name = "Gloria_Pasa";
 					gloria.GetComponent<SpriteRenderer>().material.color = Color.yellow;
-					Destroy (col.gameObject);
+					Destroy (col.GetComponent<BoxCollider2D>());
+					Material mat = new Material(col.GetComponent<SpriteRenderer>().material);
+					mat.color = Color.white;
+					col.GetComponent<SpriteRenderer>().material = mat;
+					col.name = col.name + "-Deceased";
 				}
 			}
 		}
@@ -34,7 +38,7 @@ public class PutoFood : MonoBehaviour {
 		topos = cpos - pos;
 	}
 
-	void OnMouseOver (){
+	void OnMouseDrag (){
 		Vector3 cpos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		Vector3 pos = transform.position;
 		pos = new Vector3 (cpos.x - topos.x, cpos.y - topos.y, pos.z);

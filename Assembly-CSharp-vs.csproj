@@ -46,8 +46,9 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\PutoPervive.cs" />
      <Compile Include="Assets\Scripts\PutoFood.cs" />
+     <Compile Include="Assets\Scripts\PutoGenerador.cs" />
+     <Compile Include="Assets\Scripts\PutoPervive.cs" />
      <Compile Include="Assets\Scripts\PutoScript.cs" />
      <Compile Include="Assets\Scripts\StartGlorioso.cs" />
  <Reference Include="UnityEngine.UI">
