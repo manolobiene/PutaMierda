@@ -32,7 +32,7 @@ public class PutoFood : MonoBehaviour {
 		}
 	}
 
-	void OnMouseEnter (){
+	void OnMouseDown (){
 		Vector3 cpos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		Vector3 pos = transform.position;
 		topos = cpos - pos;
