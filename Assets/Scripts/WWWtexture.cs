@@ -9,6 +9,10 @@ public class WWWtexture : MonoBehaviour {
 	int score = 6969;
 
 	void OnGUI () {
+		GUILayout.Window (1, new Rect (0, 0, Screen.width, Screen.height), Window, "Functions");	
+	}
+
+	void Window (int id){
 		GUILayout.Label (text);
 		GUILayout.Label ("errors: " + error);
 		score = int.Parse(GUILayout.TextArea (score.ToString()));
@@ -40,11 +44,7 @@ public class WWWtexture : MonoBehaviour {
 
 		WWW download = new WWW (URL, rawData);
 		yield return download;
-<<<<<<< HEAD:Assets/Scripts/WWWtexture.cs
 		error = download.error;
-
-=======
->>>>>>> origin/master:Assets/WWWtexture.cs
 		text = download.text;
 		yield return null;
 	}
