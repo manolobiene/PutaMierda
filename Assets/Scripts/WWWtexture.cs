@@ -40,8 +40,11 @@ public class WWWtexture : MonoBehaviour {
 
 		WWW download = new WWW (URL, rawData);
 		yield return download;
+<<<<<<< HEAD:Assets/Scripts/WWWtexture.cs
 		error = download.error;
 
+=======
+>>>>>>> origin/master:Assets/WWWtexture.cs
 		text = download.text;
 		yield return null;
 	}
