@@ -38,8 +38,7 @@ public class WWWtexture : MonoBehaviour {
 		byte[] rawData = form.data;
 
 		WWW download = new WWW (URL, rawData);
-		while (!download.isDone) {
-		}
+		yield return download;
 		text = download.text;
 		yield return null;
 	}
