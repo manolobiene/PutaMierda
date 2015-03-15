@@ -3,13 +3,14 @@ using System.Collections;
 
 public class WWWtexture : MonoBehaviour {
 	public string URL;
-	string text;
+	string text, error;
 	string mode = "select";
 	string name = "gato";
 	int score = 6969;
 
 	void OnGUI () {
 		GUILayout.Label (text);
+		GUILayout.Label ("errors: " + error);
 		score = int.Parse(GUILayout.TextArea (score.ToString()));
 		name = GUILayout.TextArea (name);
 		if (GUILayout.Button ("insert")) {
@@ -38,8 +39,9 @@ public class WWWtexture : MonoBehaviour {
 		byte[] rawData = form.data;
 
 		WWW download = new WWW (URL, rawData);
-		while (!download.isDone) {
-		}
+		yield return download;
+		error = download.error;
+
 		text = download.text;
 		yield return null;
 	}

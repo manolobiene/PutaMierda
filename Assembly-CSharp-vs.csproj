@@ -51,7 +51,8 @@
      <Compile Include="Assets\Scripts\PutoPervive.cs" />
      <Compile Include="Assets\Scripts\PutoScript.cs" />
      <Compile Include="Assets\Scripts\StartGlorioso.cs" />
-     <Compile Include="Assets\WWWtexture.cs" />
+     <Compile Include="Assets\Scripts\WWWtexture.cs" />
+     <None Include="Assets\Plugins\AndroidManifest.xml" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
