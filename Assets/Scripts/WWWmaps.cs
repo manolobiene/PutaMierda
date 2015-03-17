@@ -9,6 +9,9 @@ public class WWWmaps : MonoBehaviour {
 	float posy;
 	Vector3 storedMouse;
 
+	//notification
+	bool noprofile = false;
+
 	void Start () {
 		StartCoroutine("UpdateData");
 	}
@@ -36,15 +39,19 @@ public class WWWmaps : MonoBehaviour {
 				}
 			}
 		}
-		if (PlayerPrefs.GetInt ("MapCount") < 9) {
-			if (GUI.Button (new Rect (0 + Screen.width * 0.333333f * x, Screen.width * 0.02f * 1.6f + Screen.width * 0.333333f * 1.6f * y 
-				+ posy, Screen.width * 0.333333f, Screen.width * 0.333333f * 1.6f), "Nuevo")) {
-				PlayerPrefs.SetInt ("EditIDs", PlayerPrefs.GetInt ("EditIDs") + 1);
-				PlayerPrefs.SetString ("SelectedMap", "Map" + PlayerPrefs.GetInt ("EditIDs").ToString ());
-				PlayerPrefs.SetString ("SelectedValues", "");
-				GetComponent<PutoMenu> ().MenuState = PutoMenu.MenuStates.idle;
-				this.enabled = false;
-				Application.LoadLevel ("PutoMapGenerator");
+		if (noprofile) {
+			GUILayout.Box("Error. No existe un perfil asignado a la sesion. \nReinicie la aplicacion");
+		} else {
+			if (PlayerPrefs.GetInt ("MapCount") < 9) {
+				if (GUI.Button (new Rect (0 + Screen.width * 0.333333f * x, Screen.width * 0.02f * 1.6f + Screen.width * 0.333333f * 1.6f * y 
+					+ posy, Screen.width * 0.333333f, Screen.width * 0.333333f * 1.6f), "Nuevo")) {
+					PlayerPrefs.SetInt ("EditIDs", PlayerPrefs.GetInt ("EditIDs") + 1);
+					PlayerPrefs.SetString ("SelectedMap", "Map" + PlayerPrefs.GetInt ("EditIDs").ToString ());
+					PlayerPrefs.SetString ("SelectedValues", "");
+					GetComponent<PutoMenu> ().MenuState = PutoMenu.MenuStates.idle;
+					this.enabled = false;
+					Application.LoadLevel ("PutoMapGenerator");
+				}
 			}
 		}
 		GUILayout.EndArea ();
@@ -119,6 +126,23 @@ public class WWWmaps : MonoBehaviour {
 			}
 		} else {
 			mapsT[0] = null;
+		}
+		StartCoroutine("PlayerExists");
+	}
+
+	IEnumerator PlayerExists () {
+		WWWForm form = new WWWForm ();
+		form.AddField("mode", "identification");
+		form.AddField("identification", PlayerPrefs.GetString("identification"));
+		
+		byte[] bytes = form.data;
+		WWW download = new WWW (PlayerPrefs.GetString ("URL"), bytes);
+		yield return download;
+
+		if (download.text == " ") {
+			noprofile = true;
+		} else {
+			noprofile = false;
 		}
 	}
 

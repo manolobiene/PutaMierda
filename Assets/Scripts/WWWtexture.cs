@@ -9,7 +9,7 @@ public class WWWtexture : MonoBehaviour {
 	IEnumerator Start () {
 		WWWForm form = new WWWForm ();
 		form.AddField ("mode", "identification");
-		form.AddField ("identification", PlayerPrefs.GetInt("identification"));
+		form.AddField ("identification", PlayerPrefs.GetString("identification"));
 		byte[] rawData = form.data;
 		
 		WWW download = new WWW (PlayerPrefs.GetString("URL"), rawData);
@@ -49,12 +49,12 @@ public class WWWtexture : MonoBehaviour {
 	IEnumerator Upd () {
 		WWWForm form = new WWWForm ();
 		form.AddField ("mode", "identification");
-		form.AddField ("identification", PlayerPrefs.GetInt("identification"));
+		form.AddField ("identification", PlayerPrefs.GetString("identification"));
 		byte[] rawData = form.data;
 		
 		WWW download = new WWW (PlayerPrefs.GetString("URL"), rawData);
 		yield return download;
-		if (download.text == " " || download.text == null) {
+		if (download.text == " ") {
 			mode = "insert";
 			StartCoroutine ("MySQL");
 		} else {
@@ -69,7 +69,7 @@ public class WWWtexture : MonoBehaviour {
 		form.AddField ("mode", mode);
 		form.AddField ("name", PlayerPrefs.GetString("name"));
 		form.AddField ("score", score);
-		form.AddField ("identification", PlayerPrefs.GetInt("identification"));
+		form.AddField ("identification", PlayerPrefs.GetString("identification"));
 		byte[] rawData = form.data;
 
 		WWW download = new WWW (PlayerPrefs.GetString("URL"), rawData);
