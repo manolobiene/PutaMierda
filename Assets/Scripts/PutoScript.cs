@@ -7,9 +7,6 @@ public class PutoScript : MonoBehaviour {
 
 	void Start () {
 		PlayerPrefs.SetString ("URL", URL);
-		Debug.Log (System.DateTime.Now.Month.ToString() 
-		           + System.DateTime.Now.Day.ToString() + System.DateTime.Now.Hour.ToString() 
-		           + System.DateTime.Now.Minute.ToString() + System.DateTime.Now.Second.ToString());
 		if (PlayerPrefs.GetInt ("identification") == null || PlayerPrefs.GetInt ("identification") == 0) {
 			string date = System.DateTime.Now.Year.ToString().Remove(0,2) + System.DateTime.Now.Month.ToString() 
 				+ System.DateTime.Now.Day.ToString() + System.DateTime.Now.Hour.ToString() 
@@ -30,19 +27,9 @@ public class PutoScript : MonoBehaviour {
 		WWW www = new WWW (PlayerPrefs.GetString("URL"), bytes);
 		yield return www;
 		if (www.error != null && www.error != "") {
-			Debug.Log ("nope");
-			yield return new WaitForSeconds(5);
-			www = new WWW (PlayerPrefs.GetString ("URL"), bytes);
-			yield return www;
-			if (www.error != null && www.error != "") {
-				Debug.Log ("nope2");
-				PlayerPrefs.SetString ("NetError", www.error);
-				//Application.LoadLevel ("UnableToConnect");
-				disconnected = true;
-			}
-			else{
-				Application.LoadLevel ("Menu");
-			}
+			PlayerPrefs.SetString ("NetError", www.error);
+			//Application.LoadLevel ("UnableToConnect");
+			disconnected = true;
 		} else {
 			Application.LoadLevel ("Menu");
 		}
