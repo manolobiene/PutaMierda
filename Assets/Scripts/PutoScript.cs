@@ -22,7 +22,8 @@ public class PutoScript : MonoBehaviour {
 
 	IEnumerator CheckNetworkAvailability () {
 		WWWForm form = new WWWForm();
-		form.AddField("mode", "hola");
+		form.AddField("mode", "select");
+		form.AddField("identification", PlayerPrefs.GetInt("identification"));
 		byte[] bytes = form.data;
 		WWW www = new WWW (PlayerPrefs.GetString("URL"), bytes);
 		yield return www;
@@ -31,6 +32,22 @@ public class PutoScript : MonoBehaviour {
 			//Application.LoadLevel ("UnableToConnect");
 			disconnected = true;
 		} else {
+			if (www.text == " "){
+				form = new WWWForm();
+				form.AddField("mode", "insert");
+				form.AddField("score", 10);
+				form.AddField("name", PlayerPrefs.GetString("name"));
+				form.AddField("identification", PlayerPrefs.GetInt("identification"));
+				bytes = form.data;
+				www = new WWW (PlayerPrefs.GetString("URL"), bytes);
+				yield return www;
+				if (www.error != null && www.error != "") {
+					PlayerPrefs.SetString ("NetError", www.error);
+					Application.LoadLevel ("UnableToConnect");
+				} else {
+					Application.LoadLevel ("Menu");
+				}
+			}
 			Application.LoadLevel ("Menu");
 		}
 	}
