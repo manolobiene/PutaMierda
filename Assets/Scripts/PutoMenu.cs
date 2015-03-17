@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PutoMenu : MonoBehaviour {
-	public enum MenuStates {selectMode = 1, editor = 2, singleplayer = 3, idle = 4, editing = 5};
+	public enum MenuStates {selectMode = 1, editor = 2, tabla = 3, idle = 4, editing = 5};
 	public MenuStates MenuState;
 	public bool disconnectAlert = false;
 
@@ -17,8 +17,9 @@ public class PutoMenu : MonoBehaviour {
 			if (GetComponent<WWWmaps>().enabled == true){
 				GetComponent<WWWmaps>().enabled = false;
 			}
-			if (GUI.Button(new Rect(0,0,Screen.width,Screen.height/2), "Jugar")){
-				MenuState = MenuStates.singleplayer;
+			if (GUI.Button(new Rect(0,0,Screen.width,Screen.height/2), "Tabla")){
+				Application.LoadLevel("PutoBoard");
+				MenuState = MenuStates.tabla;
 			}
 			if (GUI.Button(new Rect(0,Screen.height/2,Screen.width,Screen.height/2), "Editar")){
 				MenuState = MenuStates.editor;
@@ -29,7 +30,11 @@ public class PutoMenu : MonoBehaviour {
 				GetComponent<WWWmaps>().enabled = true;
 			}
 			break;
-		case MenuStates.singleplayer:
+		case MenuStates.tabla:
+			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Volver")){
+				Application.LoadLevel("Menu");
+				Destroy(gameObject);
+			}
 			break;
 		case MenuStates.idle:
 			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Volver")){
@@ -52,6 +57,11 @@ public class PutoMenu : MonoBehaviour {
 			}
 			if (GUI.Button(new Rect(Screen.width*0.3f,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Guardar")){
 				SaveCustoms();
+				MenuState = MenuStates.editor;
+			}
+			if (GUI.Button(new Rect(Screen.width-Screen.width*0.3f,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Borrar")){
+				SaveCustoms();
+				DeleteMap();
 				MenuState = MenuStates.editor;
 			}
 			break;
@@ -113,6 +123,38 @@ public class PutoMenu : MonoBehaviour {
 		GetComponent<WWWmaps>().StartCoroutine("SendMaps");
 		Destroy(GameObject.Find ("map"));
 		Destroy(GameObject.Find ("Generator"));
-		Debug.Log ("NEW: " + newmaps);
+	}
+
+	void DeleteMap () {
+		string str = PlayerPrefs.GetString("maps");
+		string newmaps = "";
+		if (str != "" && str != null && str != " ") {
+			string[] strs = str.Split (";".ToCharArray ());
+			int a = 0;
+			int b = 0;
+			string[] maps = new string[strs.Length];
+			string[] vals = new string[strs.Length];
+			Debug.Log (PlayerPrefs.GetString ("SelectedMap"));
+			foreach (string s in strs) {
+				if (s.Split (":".ToCharArray ()) [0] != PlayerPrefs.GetString ("SelectedMap")){
+					maps [a] = s.Split (":".ToCharArray ()) [0];
+					vals [b] = s.Split (":".ToCharArray ()) [1];
+					a++;
+					b++;
+				}
+			}
+			for (int i = 0; i < maps.Length; i++) {
+				if (maps [i] != null && maps [i] != "") {
+					if (newmaps != "") {
+						newmaps += ";";
+					}
+					newmaps += maps [i] + ":" + vals [i];
+				}
+			}
+		}
+		PlayerPrefs.SetString ("maps", newmaps);
+		GetComponent<WWWmaps>().StartCoroutine("SendMaps");
+		Destroy(GameObject.Find ("map"));
+		Destroy(GameObject.Find ("Generator"));
 	}
 }

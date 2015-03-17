@@ -36,14 +36,16 @@ public class WWWmaps : MonoBehaviour {
 				}
 			}
 		}
-		if (GUI.Button (new Rect (0 + Screen.width * 0.333333f * x, Screen.width * 0.02f * 1.6f + Screen.width * 0.333333f * 1.6f * y 
-		                          + posy, Screen.width * 0.333333f, Screen.width * 0.333333f * 1.6f), "Nuevo")) {
-			PlayerPrefs.SetInt ("EditIDs", PlayerPrefs.GetInt("EditIDs") + 1);
-			PlayerPrefs.SetString ("SelectedMap", "Map" + PlayerPrefs.GetInt("EditIDs").ToString());
-			PlayerPrefs.SetString ("SelectedValues", "");
-			GetComponent<PutoMenu> ().MenuState = PutoMenu.MenuStates.idle;
-			this.enabled = false;
-			Application.LoadLevel ("PutoMapGenerator");
+		if (PlayerPrefs.GetInt ("MapCount") < 9) {
+			if (GUI.Button (new Rect (0 + Screen.width * 0.333333f * x, Screen.width * 0.02f * 1.6f + Screen.width * 0.333333f * 1.6f * y 
+				+ posy, Screen.width * 0.333333f, Screen.width * 0.333333f * 1.6f), "Nuevo")) {
+				PlayerPrefs.SetInt ("EditIDs", PlayerPrefs.GetInt ("EditIDs") + 1);
+				PlayerPrefs.SetString ("SelectedMap", "Map" + PlayerPrefs.GetInt ("EditIDs").ToString ());
+				PlayerPrefs.SetString ("SelectedValues", "");
+				GetComponent<PutoMenu> ().MenuState = PutoMenu.MenuStates.idle;
+				this.enabled = false;
+				Application.LoadLevel ("PutoMapGenerator");
+			}
 		}
 		GUILayout.EndArea ();
 		GUILayout.BeginArea (new Rect (0, Screen.height * 0.75f, Screen.width, Screen.height * 0.25f));
@@ -54,24 +56,28 @@ public class WWWmaps : MonoBehaviour {
 		if (GUILayout.Button ("Menu")) {
 			GetComponent<PutoMenu>().MenuState = PutoMenu.MenuStates.selectMode;
 		}
-		if (GUILayout.Button ("Insertar")) {
-			StartCoroutine ("SendMaps");
-		}
 		if (GUILayout.Button ("EmptyPREFS")) {
 			PlayerPrefs.DeleteAll();
+			Destroy(gameObject);
+			Application.LoadLevel(0);
 		}
 		GUILayout.EndArea ();
 	}
 
 	public IEnumerator SendMaps () {
-		WWWForm form = new WWWForm ();
-		form.AddField ("mode", "setMaps");
-		form.AddField ("maps", PlayerPrefs.GetString ("maps"));
-		form.AddField ("identification", PlayerPrefs.GetString("identification"));
-		byte[] data = form.data;
+		for (int i = 0; i < 2; i++) {
+			Debug.Log ("SENDING: " + PlayerPrefs.GetString ("maps"));
+			WWWForm form = new WWWForm ();
+			form.AddField ("mode", "setMaps");
+			form.AddField ("maps", PlayerPrefs.GetString ("maps"));
+			form.AddField ("identification", PlayerPrefs.GetString ("identification"));
+			byte[] data = form.data;
 
-		WWW download = new WWW (PlayerPrefs.GetString ("URL"), data);
-		yield return download;
+			WWW download = new WWW (PlayerPrefs.GetString ("URL"), data);
+			yield return download;
+			Debug.Log (download.text);
+			yield return null;
+		}
 		StartCoroutine ("UpdateData");
 	}
 
@@ -86,7 +92,7 @@ public class WWWmaps : MonoBehaviour {
 
 		string str = "";
 		if (download.error == null || download.error == "") {
-			Debug.Log (download.text);
+			Debug.Log ("RECEIVING: " + download.text);
 			str = download.text.Substring (0, download.text.Length - 1);
 			PlayerPrefs.SetString("maps", str);
 		} else {
@@ -98,6 +104,7 @@ public class WWWmaps : MonoBehaviour {
 			int b = 0;
 			maps = new string[strs.Length];
 			values = new string[strs.Length];
+			PlayerPrefs.SetInt("MapCount", strs.Length);
 			foreach (string s in strs) {
 				maps [a] = s.Split (":".ToCharArray ()) [0];
 				a++;
@@ -161,12 +168,13 @@ public class WWWmaps : MonoBehaviour {
 	void Update () {
 		if (Input.touchCount == 0) {
 			storedMouse = Vector3.zero;
-		}
-		if (storedMouse == Vector3.zero) {
-			storedMouse = Input.mousePosition;
 		} else {
-			posy -= Input.mousePosition.y - storedMouse.y;
-			storedMouse = Input.mousePosition;
+			if (storedMouse == Vector3.zero) {
+				storedMouse = Input.mousePosition;
+			} else {
+				posy -= Input.mousePosition.y - storedMouse.y;
+				storedMouse = Input.mousePosition;
+			}
 		}
 		posy = Mathf.Clamp(posy, -Screen.height*0.14f*(int)(maps.Length/3f), 0);
 	}
