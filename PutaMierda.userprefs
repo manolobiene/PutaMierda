@@ -1,13 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PutoScript.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PutoGenerador.cs">
     <Files>
-      <File FileName="Assets\Scripts\PutoScript.cs" Line="9" Column="38" />
-      <File FileName="Assets\Scripts\WWWmaps.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PutoGenerador.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MapFromText.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PutoFood.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PutoMenu.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PutoScript.cs" Line="15" Column="80" />
+      <File FileName="Assets\Scripts\WWWmaps.cs" Line="61" Column="52" />
+      <File FileName="Assets\Scripts\PutoGenerador.cs" Line="87" Column="38" />
+      <File FileName="Assets\EditaModule.cs" Line="18" Column="35" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

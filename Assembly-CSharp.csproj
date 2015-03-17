@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\EditaModule.cs" />
      <Compile Include="Assets\Scripts\MapFromText.cs" />
      <Compile Include="Assets\Scripts\PutaDesconexion.cs" />
      <Compile Include="Assets\Scripts\PutoFood.cs" />

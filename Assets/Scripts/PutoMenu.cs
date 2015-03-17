@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PutoMenu : MonoBehaviour {
-	public enum MenuStates {selectMode = 1, editor = 2, singleplayer = 3, idle = 4};
+	public enum MenuStates {selectMode = 1, editor = 2, singleplayer = 3, idle = 4, editing = 5};
 	public MenuStates MenuState;
 	public bool disconnectAlert = false;
 
@@ -32,8 +32,26 @@ public class PutoMenu : MonoBehaviour {
 		case MenuStates.singleplayer:
 			break;
 		case MenuStates.idle:
-			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Selector")){
+			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Volver")){
+				Destroy(GameObject.Find("Generator"));
 				Destroy(GameObject.Find ("map"));
+				MenuState = MenuStates.editor;
+			}
+			if (GUI.Button(new Rect(Screen.width*0.3f,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Editar")){
+				Destroy(GameObject.Find ("map"));
+				GameObject.Find ("Generator").GetComponent<MapFromText>().GeneradorState = MapFromText.GeneradorStates.editar;
+				GameObject.Find ("Generator").GetComponent<MapFromText>().GenMap();
+				MenuState = MenuStates.editing;
+			}
+			break;
+		case MenuStates.editing:
+			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Salir")){
+				Destroy(GameObject.Find("Generator"));
+				Destroy(GameObject.Find ("map"));
+				MenuState = MenuStates.editor;
+			}
+			if (GUI.Button(new Rect(Screen.width*0.3f,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Guardar")){
+				SaveCustoms();
 				MenuState = MenuStates.editor;
 			}
 			break;
@@ -47,5 +65,54 @@ public class PutoMenu : MonoBehaviour {
 				"\nError: " + PlayerPrefs.GetString("NetError"));
 			GUILayout.EndArea();
 		}
+	}
+
+	void SaveCustoms () {
+		string values = "";
+		foreach (GameObject g in GameObject.FindGameObjectsWithTag ("Edita")) {
+			if (values != ""){
+				values += ",";
+			}
+			values += g.GetComponent<EditaModule>().block.ToString();
+		}
+		string str = PlayerPrefs.GetString("maps");
+		string newmaps = "";
+		if (str != "" && str != null && str != " ") {
+			string[] strs = str.Split (";".ToCharArray ());
+			int a = 0;
+			int b = 0;
+			string[] maps = new string[strs.Length + 1];
+			string[] vals = new string[strs.Length + 1];
+			bool coincidencia = false;
+			foreach (string s in strs) {
+				maps [a] = s.Split (":".ToCharArray ()) [0];
+				vals [b] = s.Split (":".ToCharArray ()) [1];
+				if (maps [a] == PlayerPrefs.GetString ("SelectedMap")) {
+					coincidencia = true;
+					vals [b] = values;
+				}
+				a++;
+				b++;
+			}
+			if (!coincidencia) {
+				maps [a] = PlayerPrefs.GetString ("SelectedMap");
+				vals [b] = values;
+			}
+			for (int i = 0; i < maps.Length; i++) {
+				if (maps [i] != null && maps [i] != "") {
+					if (newmaps != "") {
+						newmaps += ";";
+					}
+					newmaps += maps [i] + ":" + vals [i];
+				}
+			}
+		} else {
+			newmaps = PlayerPrefs.GetString ("SelectedMap") + ":" + values;
+		}
+		PlayerPrefs.SetString ("maps", newmaps);
+		GetComponent<WWWmaps>().StartCoroutine("SendMaps");
+		Destroy(GameObject.Find ("map"));
+		Destroy(GameObject.Find ("Generator"));
+		Debug.Log ("NEW: " + newmaps);
 	}
 }

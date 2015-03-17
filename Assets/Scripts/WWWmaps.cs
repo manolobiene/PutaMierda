@@ -35,12 +35,19 @@ public class WWWmaps : MonoBehaviour {
 					y++;
 				}
 			}
-		} else {
-			GUI.Label(new Rect(0,0,Screen.width,Screen.height*0.8f), "No existen mapas en la base de datos");
+		}
+		if (GUI.Button (new Rect (0 + Screen.width * 0.333333f * x, Screen.width * 0.02f * 1.6f + Screen.width * 0.333333f * 1.6f * y 
+		                          + posy, Screen.width * 0.333333f, Screen.width * 0.333333f * 1.6f), "Nuevo")) {
+			PlayerPrefs.SetInt ("EditIDs", PlayerPrefs.GetInt("EditIDs") + 1);
+			PlayerPrefs.SetString ("SelectedMap", "Map" + PlayerPrefs.GetInt("EditIDs").ToString());
+			PlayerPrefs.SetString ("SelectedValues", "");
+			GetComponent<PutoMenu> ().MenuState = PutoMenu.MenuStates.idle;
+			this.enabled = false;
+			Application.LoadLevel ("PutoMapGenerator");
 		}
 		GUILayout.EndArea ();
 		GUILayout.BeginArea (new Rect (0, Screen.height * 0.75f, Screen.width, Screen.height * 0.25f));
-		PlayerPrefs.SetString ("maps", GUILayout.TextArea (PlayerPrefs.GetString ("maps")));
+		//PlayerPrefs.SetString ("maps", GUILayout.TextArea (PlayerPrefs.GetString ("maps")));
 		if (GUILayout.Button ("Actualizar")) {
 			StartCoroutine("UpdateData");
 		}
@@ -50,14 +57,17 @@ public class WWWmaps : MonoBehaviour {
 		if (GUILayout.Button ("Insertar")) {
 			StartCoroutine ("SendMaps");
 		}
+		if (GUILayout.Button ("EmptyPREFS")) {
+			PlayerPrefs.DeleteAll();
+		}
 		GUILayout.EndArea ();
 	}
 
-	IEnumerator SendMaps () {
+	public IEnumerator SendMaps () {
 		WWWForm form = new WWWForm ();
 		form.AddField ("mode", "setMaps");
 		form.AddField ("maps", PlayerPrefs.GetString ("maps"));
-		form.AddField ("identification", PlayerPrefs.GetInt("identification"));
+		form.AddField ("identification", PlayerPrefs.GetString("identification"));
 		byte[] data = form.data;
 
 		WWW download = new WWW (PlayerPrefs.GetString ("URL"), data);
@@ -68,7 +78,7 @@ public class WWWmaps : MonoBehaviour {
 	IEnumerator UpdateData () {
 		WWWForm form = new WWWForm ();
 		form.AddField("mode", "selectMaps");
-		form.AddField("identification", PlayerPrefs.GetInt("identification"));
+		form.AddField("identification", PlayerPrefs.GetString("identification"));
 
 		byte[] bytes = form.data;
 		WWW download = new WWW (PlayerPrefs.GetString ("URL"), bytes);
@@ -100,6 +110,8 @@ public class WWWmaps : MonoBehaviour {
 				tx.filterMode = FilterMode.Point;
 				mapsT [i] = tx;
 			}
+		} else {
+			mapsT[0] = null;
 		}
 	}
 
