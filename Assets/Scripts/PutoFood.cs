@@ -15,7 +15,8 @@ public class PutoFood : MonoBehaviour {
 				PlayerPrefs.SetInt ("JodidaComida", i+1);
 				PlayerPrefs.SetInt ("JodidaComidaYaTenida", i);
 				Camera.main.GetComponents<AudioSource>()[1].Play();
-				Application.LoadLevel(1);
+				Destroy(GameObject.Find ("map"));
+				Camera.main.GetComponent<PutoMenu>().MenuState = PutoMenu.MenuStates.editor;
 			}
 			if (col.gameObject.name == "PutoNombrador"){
 				if (!GameObject.Find("Gloria_Pasa")){

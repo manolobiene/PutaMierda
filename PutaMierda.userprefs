@@ -1,8 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\WWWtexture.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\WWWmaps.cs">
     <Files>
-      <File FileName="Assets\Scripts\WWWtexture.cs" Line="15" Column="21" />
+      <File FileName="Assets\Scripts\WWWmaps.cs" Line="151" Column="4" />
+      <File FileName="Assets\Scripts\PutoGenerador.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MapFromText.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PutoFood.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PutoMenu.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

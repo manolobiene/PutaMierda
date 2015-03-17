@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class WWWtexture : MonoBehaviour {
-	public string URL;
 	string text, error;
 	string mode;
 	int score = 10;
@@ -13,7 +12,7 @@ public class WWWtexture : MonoBehaviour {
 		form.AddField ("identification", PlayerPrefs.GetInt("identification"));
 		byte[] rawData = form.data;
 		
-		WWW download = new WWW (URL, rawData);
+		WWW download = new WWW (PlayerPrefs.GetString("URL"), rawData);
 		yield return download;
 		if (download.text == " " || download.text == null) {
 			Debug.Log ("no");
@@ -53,7 +52,7 @@ public class WWWtexture : MonoBehaviour {
 		form.AddField ("identification", PlayerPrefs.GetInt("identification"));
 		byte[] rawData = form.data;
 		
-		WWW download = new WWW (URL, rawData);
+		WWW download = new WWW (PlayerPrefs.GetString("URL"), rawData);
 		yield return download;
 		if (download.text == " " || download.text == null) {
 			mode = "insert";
@@ -73,7 +72,7 @@ public class WWWtexture : MonoBehaviour {
 		form.AddField ("identification", PlayerPrefs.GetInt("identification"));
 		byte[] rawData = form.data;
 
-		WWW download = new WWW (URL, rawData);
+		WWW download = new WWW (PlayerPrefs.GetString("URL"), rawData);
 		yield return download;
 		error = download.error;
 		text = "please wait...";
