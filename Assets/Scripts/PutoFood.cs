@@ -6,29 +6,16 @@ public class PutoFood : MonoBehaviour {
 
 	void OnTriggerEnter2D (Collider2D col){
 		if (col.gameObject.tag == "PutoJoder") {
-			Camera.main.GetComponents<AudioSource>()[2].Play();
-			Application.LoadLevel(Application.loadedLevelName);
+			col.GetComponent<PutoJoder>().Action();
 		}
 		if (col.gameObject.tag == "GloriaVendita") {
 			if (col.gameObject.name == "Gloria_Pasa"){
-				int i = PlayerPrefs.GetInt ("JodidaComida");
-				PlayerPrefs.SetInt ("JodidaComida", i+1);
-				PlayerPrefs.SetInt ("JodidaComidaYaTenida", i);
-				Camera.main.GetComponents<AudioSource>()[1].Play();
-				Destroy(GameObject.Find ("map"));
-				Camera.main.GetComponent<PutoMenu>().MenuState = PutoMenu.MenuStates.editor;
+				col.GetComponent<Gloria>().Pasa();
 			}
-			if (col.gameObject.name == "PutoNombrador"){
-				if (!GameObject.Find("Gloria_Pasa")){
-					GameObject gloria = GameObject.Find("Gloria");
-					gloria.name = "Gloria_Pasa";
-					gloria.GetComponent<SpriteRenderer>().material.color = Color.yellow;
-					Destroy (col.GetComponent<BoxCollider2D>());
-					Material mat = new Material(col.GetComponent<SpriteRenderer>().material);
-					mat.color = Color.white;
-					col.GetComponent<SpriteRenderer>().material = mat;
-					col.name = col.name + "-Deceased";
-				}
+		}
+		if (col.gameObject.tag == "Coin") {
+			if (col.gameObject.name == "Coin"){
+				col.GetComponent<Coin>().Action();
 			}
 		}
 	}

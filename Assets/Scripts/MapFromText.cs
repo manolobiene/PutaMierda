@@ -6,19 +6,20 @@ public class MapFromText : MonoBehaviour {
 	public GeneradorStates GeneradorState;
 	public GameObject Wall, Floor, Weedy, GloriaBendita, Gloria_Pasa, PutoNombrador;
 	public GameObject Edita;
-	// Update is called once per frame
+
 	void Start () {
 		GenMap ();
 	}
 
 	public void GenMap () {
 		string INvalues = PlayerPrefs.GetString ("SelectedValues");
-		float size = Wall.GetComponent<SpriteRenderer> ().bounds.size.x;
+		Vector2 size = new Vector2 (Wall.GetComponent<SpriteRenderer> ().bounds.size.x
+		                           , Wall.GetComponent<SpriteRenderer> ().bounds.size.y);
 		int x = 0;
 		int y = 0;
 
 		GameObject parent = GameObject.CreatePrimitive (PrimitiveType.Cube);
-		parent.transform.position = new Vector3 (5 * size / 2 - size / 2, 8 * size / 2 - size / 2, 0);
+		parent.transform.position = new Vector3 (5 * size.x / 2 - size.x / 2, 8 * size.y / 2 - size.y / 2, 0);
 		parent.name = "map";
 		Destroy (parent.GetComponent<MeshRenderer> ());
 		
@@ -42,40 +43,41 @@ public class MapFromText : MonoBehaviour {
 					switch (s) {
 					case "0":
 						GameObject obj = Instantiate (Wall);
-						obj.transform.position = new Vector3 (x * size, y * size, 0);
+						obj.transform.position = new Vector3 (x * size.x, y * size.y, 0);
 						obj.transform.parent = walls.transform;
 						break;
 					case "1":
 						GameObject obj1 = Instantiate (Floor);
-						obj1.transform.position = new Vector3 (x * size, y * size, 0);
+						obj1.transform.position = new Vector3 (x * size.x, y * size.y, 0);
 						obj1.transform.parent = walls.transform;
 						break;
 					case "2":
 						GameObject obj2 = Instantiate (Weedy);
-						obj2.transform.position = new Vector3 (x * size, y * size, 0);
+						obj2.transform.position = new Vector3 (x * size.x, y * size.y, 0);
 						obj2.transform.parent = objects.transform;
 						obj2.name = "PutaHierba";
 						obj2 = Instantiate (Floor);
-						obj2.transform.position = new Vector3 (x * size, y * size, 0);
+						obj2.transform.position = new Vector3 (x * size.x, y * size.y, 0);
 						obj2.transform.parent = walls.transform;
 						break;
 					case "3":
 						GameObject obj4 = Instantiate (Gloria_Pasa);
-						obj4.transform.position = new Vector3 (x * size, y * size, 0);
-						obj4.name = "Gloria_Pasa";
+						obj4.transform.position = new Vector3 (x * size.x, y * size.y, 0);
+						obj4.name = "Gloria";
 						obj4.transform.parent = objects.transform;
+						obj4.GetComponent<Gloria>().MakePasa();
 						break;
 					case "4":
 						GameObject obj3 = Instantiate (GloriaBendita);
-						obj3.transform.position = new Vector3 (x * size, y * size, 0);
+						obj3.transform.position = new Vector3 (x * size.x, y * size.y, 0);
 						obj3.name = "Gloria";
 						obj3.transform.parent = objects.transform;
 						break;
 					case "5":
 						GameObject obj5 = Instantiate (PutoNombrador);
-						obj5.transform.position = new Vector3 (x * size, y * size, 0);
+						obj5.transform.position = new Vector3 (x * size.x, y * size.y, 0);
 						obj5.GetComponent<SpriteRenderer> ().sortingOrder = -1;
-						obj5.name = "PutoNombrador";
+						obj5.name = "Coin";
 						obj5.transform.parent = objects.transform;
 						break;
 					default:
@@ -112,12 +114,26 @@ public class MapFromText : MonoBehaviour {
 					default:
 						break;
 					}
-					obj.transform.position = new Vector3 (x * size, y * size, 0);
+					obj.transform.position = new Vector3 (x * size.x, y * size.y, 0);
 					obj.transform.parent = walls.transform;
 					x++;
 					if (x > 4) {
 						x = 0;
 						y++;
+					}
+				}
+			}
+			if (GeneradorState == GeneradorStates.crear){
+				//SyncStart
+				foreach (GameObject g in GameObject.FindGameObjectsWithTag ("GloriaVendita")){
+					if (g.GetComponent<Coin>() != null){
+						g.GetComponent<Coin>().SyncStart();
+					}
+					if (g.GetComponent<PutoJoder>() != null){
+						g.GetComponent<PutoJoder>().SyncStart();
+					}
+					if (g.GetComponent<Gloria>() != null){
+						g.GetComponent<Gloria>().SyncStart();
 					}
 				}
 			}
@@ -127,7 +143,7 @@ public class MapFromText : MonoBehaviour {
 			while (y < 8){
 				GameObject obj = Instantiate(Edita);
 				obj.GetComponent<EditaModule>().block = 0;
-				obj.transform.position = new Vector3(x*size, y*size, 0);
+				obj.transform.position = new Vector3(x * size.x, y * size.y, 0);
 				obj.transform.parent = walls.transform;
 				x++;
 				if (x > 4){

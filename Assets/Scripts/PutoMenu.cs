@@ -5,10 +5,21 @@ public class PutoMenu : MonoBehaviour {
 	public enum MenuStates {selectMode = 1, editor = 2, tabla = 3, idle = 4, editing = 5};
 	public MenuStates MenuState;
 	public bool disconnectAlert = false;
+	bool disconnected = false;
 
 	void Start () {
 		MenuState = MenuStates.selectMode;
 		DontDestroyOnLoad (gameObject);
+	}
+
+	void Update () {
+		if (disconnectAlert) {
+			disconnected = true;
+		}
+		if (disconnected && !disconnectAlert) {
+			disconnected = false;
+			GetComponent<WWWmaps>().StartCoroutine("SendMaps");
+		}
 	}
 
 	void OnGUI () {
@@ -26,6 +37,8 @@ public class PutoMenu : MonoBehaviour {
 			}
 			break;
 		case MenuStates.editor:
+			if (Camera.main.rect != new Rect(0, 0, 1, 1))
+				Camera.main.rect = new Rect(0, 0, 1, 1);
 			if (GetComponent<WWWmaps>().enabled == false){
 				GetComponent<WWWmaps>().enabled = true;
 			}
@@ -37,6 +50,8 @@ public class PutoMenu : MonoBehaviour {
 			}
 			break;
 		case MenuStates.idle:
+			if (Camera.main.rect != new Rect(0, 0, 1, 1))
+				Camera.main.rect = new Rect(0, 0, 1, 1);
 			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Volver")){
 				Destroy(GameObject.Find("Generator"));
 				Destroy(GameObject.Find ("map"));
@@ -50,6 +65,8 @@ public class PutoMenu : MonoBehaviour {
 			}
 			break;
 		case MenuStates.editing:
+			if (Camera.main.rect != new Rect(0.05f, 0.1f, 0.9f, 1))
+				Camera.main.rect = new Rect(0.05f, 0.1f, 0.9f, 1);
 			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Salir")){
 				Destroy(GameObject.Find("Generator"));
 				Destroy(GameObject.Find ("map"));

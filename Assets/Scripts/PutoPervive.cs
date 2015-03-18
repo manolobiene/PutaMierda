@@ -17,12 +17,11 @@ public class PutoPervive : MonoBehaviour {
 			yield return www;
 			if (www.error != null && www.error != "") {
 				PlayerPrefs.SetString ("NetError", www.error);
-				//Application.LoadLevel ("UnableToConnect");
 				GetComponent<PutoMenu>().disconnectAlert = true;
 			}else{
 				GetComponent<PutoMenu>().disconnectAlert = false;
 			}
-			yield return new WaitForSeconds(10);
+			yield return new WaitForSeconds(5);
 		}
 	}
 }

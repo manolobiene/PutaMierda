@@ -17,7 +17,7 @@ public class WWWmaps : MonoBehaviour {
 	}
 
 	void OnGUI () {
-		GUILayout.BeginArea (new Rect (0, 0, Screen.width, Screen.height*0.8f));
+		GUILayout.BeginArea (new Rect (0, 0, Screen.width, Screen.height*0.7f));
 		int x = 0;
 		int y = 0;
 		if (mapsT [0] != null) {
@@ -55,15 +55,12 @@ public class WWWmaps : MonoBehaviour {
 			}
 		}
 		GUILayout.EndArea ();
-		GUILayout.BeginArea (new Rect (0, Screen.height * 0.75f, Screen.width, Screen.height * 0.25f));
+		GUILayout.BeginArea (new Rect (0, Screen.height * 0.8f, Screen.width, Screen.height * 0.2f));
 		//PlayerPrefs.SetString ("maps", GUILayout.TextArea (PlayerPrefs.GetString ("maps")));
-		if (GUILayout.Button ("Actualizar")) {
-			StartCoroutine("UpdateData");
-		}
-		if (GUILayout.Button ("Menu")) {
+		if (GUILayout.Button ("Menu", GUILayout.Height(Screen.height*0.15f * 0.8f))) {
 			GetComponent<PutoMenu>().MenuState = PutoMenu.MenuStates.selectMode;
 		}
-		if (GUILayout.Button ("EmptyPREFS")) {
+		if (GUILayout.Button ("EmptyPREFS", GUILayout.Height(Screen.height*0.15f * 0.2f))) {
 			PlayerPrefs.DeleteAll();
 			Destroy(gameObject);
 			Application.LoadLevel(0);
@@ -192,7 +189,9 @@ public class WWWmaps : MonoBehaviour {
 	void Update () {
 		if (Input.touchCount == 0) {
 			storedMouse = Vector3.zero;
+			GUI.enabled = true;
 		} else {
+			GUI.enabled = false;
 			if (storedMouse == Vector3.zero) {
 				storedMouse = Input.mousePosition;
 			} else {
