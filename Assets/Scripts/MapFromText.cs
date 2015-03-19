@@ -6,9 +6,15 @@ public class MapFromText : MonoBehaviour {
 	public GeneradorStates GeneradorState;
 	public GameObject Wall, Floor, Weedy, GloriaBendita, Gloria_Pasa, PutoNombrador, Pusher;
 	public GameObject Edita;
+	bool available = true;
 
-	void Start () {
-		GenMap ();
+	public void SyncStart () {
+		if (GameObject.Find ("map"))
+			Destroy(GameObject.Find ("map"));
+		if (available) {
+			available = false;
+			GenMap ();
+		}
 	}
 
 	public void GenMap () {
@@ -176,5 +182,6 @@ public class MapFromText : MonoBehaviour {
 			}
 		}
 		parent.transform.position = Vector3.zero;
+		available = true;
 	}
 }

@@ -9,6 +9,9 @@ public class PutoJoder : MonoBehaviour {
 
 	public void Action () {
 		Camera.main.GetComponents<AudioSource>()[2].Play();
-		Application.LoadLevel (Application.loadedLevelName);
+		Destroy(GameObject.Find ("map"));
+		GameObject.Find ("Generator").GetComponent<MapFromText> ().SyncStart ();
+		Destroy (GameObject.Find ("PutaHierba"));
+		//Application.LoadLevel (Application.loadedLevelName);
 	}
 }

@@ -8,7 +8,7 @@ public class WWWtexture : MonoBehaviour {
 	int[] scores = new int[0];
 	int score = 10;
 
-	IEnumerator Start () {
+	public IEnumerator SyncStart () {
 		WWWForm form = new WWWForm ();
 		form.AddField ("mode", "identification");
 		form.AddField ("identification", PlayerPrefs.GetString("identification"));
@@ -28,7 +28,7 @@ public class WWWtexture : MonoBehaviour {
 	}
 
 	void OnGUI () {
-		GUILayout.Window (1, new Rect (0, 0, Screen.width, Screen.height), Window, "HIGH SCORES");	
+		GUILayout.Window (1, new Rect (Screen.width*0.05f, Screen.height*0.2f, Screen.width*0.9f, Screen.height*0.7f), Window, "HIGH SCORES");	
 	}
 
 	void Window (int id){

@@ -9,64 +9,64 @@ public class WWWmaps : MonoBehaviour {
 	Texture2D[] mapsT = new Texture2D[16];
 	float posy;
 	Vector3 storedMouse;
+	public bool syncing = false;
 
 	//notification
 	bool noprofile = false;
 
-	void Start () {
+	public void SyncStart () {
 		StartCoroutine("UpdateData");
 	}
 
 	void OnGUI () {
-		GUILayout.BeginArea (new Rect (0, 0, Screen.width, Screen.height*0.7f));
-		int x = 0;
-		int y = 0;
-		if (mapsT [0] != null) {
-			for (int i = 0; i < maps.Length; i++) {
-				GUI.DrawTexture (new Rect (Screen.width * 0.02f + Screen.width * 0.333333f * x, Screen.width * 0.04f * 1.6f 
-					+ Screen.width * 0.333333f * 1.6f * y + posy, Screen.width * 0.29f, Screen.width * 0.29f * 1.6f), mapsT [i]);
-				if (GUI.Button (new Rect (0 + Screen.width * 0.333333f * x, Screen.width * 0.02f * 1.6f + Screen.width * 0.333333f * 1.6f * y 
-					+ posy, Screen.width * 0.333333f, Screen.width * 0.333333f * 1.6f), maps [i])) {
-					PlayerPrefs.SetString ("SelectedMap", maps [i]);
-					PlayerPrefs.SetString ("SelectedValues", values [i]);
-					GetComponent<PutoMenu> ().MenuState = PutoMenu.MenuStates.idle;
-					this.enabled = false;
-					Application.LoadLevel ("PutoMapGenerator");
+		if (!syncing) {
+			GUILayout.BeginArea (new Rect (Screen.width*0.05f, Screen.height*0.2f, Screen.width*0.9f, Screen.height*0.7f));
+			int x = 0;
+			int y = 0;
+				if (mapsT [0] != null) {
+					for (int i = 0; i < maps.Length; i++) {
+					GUI.DrawTexture (new Rect (Screen.width * 0.015f + Screen.width * 0.2f * x, Screen.width * 0.025f * 1.6f + Screen.width * 0.2f * 1.6f * y 
+					                           + posy, Screen.width * 0.17f, Screen.width * 0.17f * 1.6f), mapsT [i]);
+						if (GUI.Button (new Rect (0 + Screen.width * 0.2f * x, Screen.width * 0.025f + Screen.width * 0.2f * 1.6f * y 
+							+ posy, Screen.width * 0.2f, Screen.width * 0.2f * 1.6f), maps [i])) {
+							PlayerPrefs.SetString ("SelectedMap", maps [i]);
+							PlayerPrefs.SetString ("SelectedValues", values [i]);
+							GetComponent<PutoMenu> ().MenuState = PutoMenu.MenuStates.idle;
+							this.enabled = false;
+							GameObject.Find ("Generator").GetComponent<MapFromText>().GeneradorState = MapFromText.GeneradorStates.crear;
+							GameObject.Find ("Generator").GetComponent<MapFromText>().SyncStart();
+							//Application.LoadLevel ("PutoMapGenerator");
+						}
+						x++;
+						if (x > 3) {
+							x = 0;
+							y++;
+						}
+					}
 				}
-				x++;
-				if (x > 2) {
-					x = 0;
-					y++;
+			if (noprofile) {
+				GUILayout.Box("Error. No existe un perfil asignado a la sesion. \nReinicie la aplicacion");
+			} else {
+				if (PlayerPrefs.GetInt ("MapCount") < 9) {
+					if (GUI.Button (new Rect (0 + Screen.width * 0.2f * x, Screen.width * 0.025f + Screen.width * 0.2f * 1.6f * y 
+						+ posy, Screen.width * 0.2f, Screen.width * 0.2f * 1.6f), "Nuevo")) {
+						PlayerPrefs.SetInt ("EditIDs", PlayerPrefs.GetInt ("EditIDs") + 1);
+						PlayerPrefs.SetString ("SelectedMap", "Map" + PlayerPrefs.GetInt ("EditIDs").ToString ());
+						PlayerPrefs.SetString ("SelectedValues", "");
+						GetComponent<PutoMenu> ().MenuState = PutoMenu.MenuStates.idle;
+						this.enabled = false;
+						GameObject.Find ("Generator").GetComponent<MapFromText>().GeneradorState = MapFromText.GeneradorStates.editar;
+						GetComponent<PutoMenu> ().MenuState = PutoMenu.MenuStates.editing;
+						GameObject.Find ("Generator").GetComponent<MapFromText>().SyncStart();
+						//Application.LoadLevel ("PutoMapGenerator");
+					}
 				}
 			}
-		}
-		if (noprofile) {
-			GUILayout.Box("Error. No existe un perfil asignado a la sesion. \nReinicie la aplicacion");
+			GUILayout.EndArea ();
 		} else {
-			if (PlayerPrefs.GetInt ("MapCount") < 9) {
-				if (GUI.Button (new Rect (0 + Screen.width * 0.333333f * x, Screen.width * 0.02f * 1.6f + Screen.width * 0.333333f * 1.6f * y 
-					+ posy, Screen.width * 0.333333f, Screen.width * 0.333333f * 1.6f), "Nuevo")) {
-					PlayerPrefs.SetInt ("EditIDs", PlayerPrefs.GetInt ("EditIDs") + 1);
-					PlayerPrefs.SetString ("SelectedMap", "Map" + PlayerPrefs.GetInt ("EditIDs").ToString ());
-					PlayerPrefs.SetString ("SelectedValues", "");
-					GetComponent<PutoMenu> ().MenuState = PutoMenu.MenuStates.idle;
-					this.enabled = false;
-					Application.LoadLevel ("PutoMapGenerator");
-				}
-			}
+			Debug.Log ("sss");
+			GUI.Box(new Rect(0,0,Screen.width,Screen.height), "Sincronizando");
 		}
-		GUILayout.EndArea ();
-		GUILayout.BeginArea (new Rect (0, Screen.height * 0.8f, Screen.width, Screen.height * 0.2f));
-		//PlayerPrefs.SetString ("maps", GUILayout.TextArea (PlayerPrefs.GetString ("maps")));
-		if (GUILayout.Button ("Menu", GUILayout.Height(Screen.height*0.15f * 0.8f))) {
-			GetComponent<PutoMenu>().MenuState = PutoMenu.MenuStates.selectMode;
-		}
-		if (GUILayout.Button ("EmptyPREFS", GUILayout.Height(Screen.height*0.15f * 0.2f))) {
-			PlayerPrefs.DeleteAll();
-			Destroy(gameObject);
-			Application.LoadLevel(0);
-		}
-		GUILayout.EndArea ();
 	}
 
 	public IEnumerator SendMaps () {
@@ -86,23 +86,8 @@ public class WWWmaps : MonoBehaviour {
 		StartCoroutine ("UpdateData");
 	}
 
-	IEnumerator UpdateData () {
-		WWWForm form = new WWWForm ();
-		form.AddField("mode", "selectMaps");
-		form.AddField("identification", PlayerPrefs.GetString("identification"));
-
-		byte[] bytes = form.data;
-		WWW download = new WWW (PlayerPrefs.GetString ("URL"), bytes);
-		yield return download;
-
-		string str = "";
-		if (download.error == null || download.error == "") {
-			Debug.Log ("RECEIVING: " + download.text);
-			str = download.text.Substring (0, download.text.Length - 1);
-			PlayerPrefs.SetString("maps", str);
-		} else {
-			str = PlayerPrefs.GetString("maps");
-		}
+	void GUIUpdate () {
+		string str = PlayerPrefs.GetString("maps");
 		if (str != "" && str != null && str != " ") {
 			string[] strs = str.Split (";".ToCharArray ());
 			int a = 0;
@@ -125,6 +110,32 @@ public class WWWmaps : MonoBehaviour {
 		} else {
 			mapsT[0] = null;
 		}
+	}
+
+	IEnumerator UpdateData () {
+		syncing = true;
+		//offline loading
+		GUIUpdate ();
+
+		//online syncing
+		WWWForm form = new WWWForm ();
+		form.AddField("mode", "selectMaps");
+		form.AddField("identification", PlayerPrefs.GetString("identification"));
+
+		byte[] bytes = form.data;
+		WWW download = new WWW (PlayerPrefs.GetString ("URL"), bytes);
+		yield return download;
+
+		string str = "";
+		if (download.error == null || download.error == "") {
+			Debug.Log ("RECEIVING: " + download.text);
+			str = download.text.Substring (0, download.text.Length - 1);
+			PlayerPrefs.SetString("maps", str);
+			GUIUpdate ();
+		} else {
+			str = PlayerPrefs.GetString("maps");
+		}
+		syncing = false;
 		StartCoroutine("PlayerExists");
 	}
 

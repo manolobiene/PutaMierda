@@ -35,13 +35,6 @@ public class PutoMenu : MonoBehaviour {
 			if (GetComponent<WWWmaps>().enabled == true){
 				GetComponent<WWWmaps>().enabled = false;
 			}
-			if (GUI.Button(new Rect(0,0,Screen.width,Screen.height/2), "Tabla")){
-				Application.LoadLevel("PutoBoard");
-				MenuState = MenuStates.tabla;
-			}
-			if (GUI.Button(new Rect(0,Screen.height/2,Screen.width,Screen.height/2), "Editar")){
-				MenuState = MenuStates.editor;
-			}
 			break;
 		case MenuStates.editor:
 			if (!GetComponents<AudioSource>()[3].isPlaying){
@@ -53,7 +46,21 @@ public class PutoMenu : MonoBehaviour {
 			}
 			if (GetComponent<WWWmaps>().enabled == false){
 				GetComponent<WWWmaps>().enabled = true;
+				GetComponent<WWWmaps>().SyncStart();
 			}
+			GUILayout.BeginArea (new Rect (0, Screen.height * 0.8f, Screen.width, Screen.height * 0.2f));
+			//PlayerPrefs.SetString ("maps", GUILayout.TextArea (PlayerPrefs.GetString ("maps")));
+			if (GUILayout.Button ("Menu", GUILayout.Height(Screen.height*0.15f * 0.8f))) {
+				GetComponent<WWWmaps>().enabled = false;
+				MenuState = PutoMenu.MenuStates.selectMode;
+				GameObject.Find ("Manu_Editor").GetComponent<InteractiveButton>().state = InteractiveButton.states.transitionB;
+			}
+			if (GUILayout.Button ("EmptyPREFS", GUILayout.Height(Screen.height*0.15f * 0.2f))) {
+				PlayerPrefs.DeleteAll();
+				Destroy(gameObject);
+				Application.LoadLevel(0);
+			}
+			GUILayout.EndArea ();
 			break;
 		case MenuStates.tabla:
 			if (!GetComponents<AudioSource>()[3].isPlaying){
@@ -64,8 +71,9 @@ public class PutoMenu : MonoBehaviour {
 				GetComponent<OnEditing>().enabled = false;
 			}
 			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Volver")){
-				Application.LoadLevel("Menu");
-				Destroy(gameObject);
+				GameObject.Find ("Empty").GetComponent<WWWtexture>().enabled = false;
+				GameObject.Find ("Manu_Tabla").GetComponent<InteractiveButton>().state = InteractiveButton.states.transitionB;
+				MenuState = MenuStates.selectMode;
 			}
 			break;
 		case MenuStates.idle:
@@ -82,14 +90,14 @@ public class PutoMenu : MonoBehaviour {
 				}
 			}
 			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Volver")){
-				Destroy(GameObject.Find("Generator"));
+				GameObject.Find ("Generator").GetComponent<MapFromText>().GeneradorState = MapFromText.GeneradorStates.crear;
 				Destroy(GameObject.Find ("map"));
 				MenuState = MenuStates.editor;
 			}
 			if (GUI.Button(new Rect(Screen.width*0.3f,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Editar")){
 				Destroy(GameObject.Find ("map"));
 				GameObject.Find ("Generator").GetComponent<MapFromText>().GeneradorState = MapFromText.GeneradorStates.editar;
-				GameObject.Find ("Generator").GetComponent<MapFromText>().GenMap();
+				GameObject.Find ("Generator").GetComponent<MapFromText>().SyncStart();
 				MenuState = MenuStates.editing;
 			}
 			break;
@@ -102,13 +110,12 @@ public class PutoMenu : MonoBehaviour {
 				GetComponent<OnEditing>().enabled = true;
 			}
 			if (GameObject.Find ("map")){
-				if (GameObject.Find("map").transform.localScale != new Vector3 (.8f,.8f,1)){
-					GameObject.Find("map").transform.localScale = new Vector3 (.8f,.8f,1);
-					GameObject.Find("map").transform.position = new Vector3(0,2,0); 
+				if (GameObject.Find("map").transform.localScale != new Vector3 (.6f,.6f,1)){
+					GameObject.Find("map").transform.localScale = new Vector3 (.6f,.6f,1);
+					GameObject.Find("map").transform.position = new Vector3(0,1.8f,0); 
 				}
 			}
 			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Salir")){
-				Destroy(GameObject.Find("Generator"));
 				Destroy(GameObject.Find ("map"));
 				MenuState = MenuStates.editor;
 			}
@@ -180,7 +187,6 @@ public class PutoMenu : MonoBehaviour {
 		Debug.Log (PlayerPrefs.GetString ("maps"));
 		GetComponent<WWWmaps>().StartCoroutine("SendMaps");
 		Destroy(GameObject.Find ("map"));
-		Destroy(GameObject.Find ("Generator"));
 	}
 
 	void DeleteMap () {
@@ -213,6 +219,5 @@ public class PutoMenu : MonoBehaviour {
 		PlayerPrefs.SetString ("maps", newmaps);
 		GetComponent<WWWmaps>().StartCoroutine("SendMaps");
 		Destroy(GameObject.Find ("map"));
-		Destroy(GameObject.Find ("Generator"));
 	}
 }
