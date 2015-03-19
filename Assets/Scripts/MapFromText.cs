@@ -4,7 +4,7 @@ using System.Collections;
 public class MapFromText : MonoBehaviour {
 	public enum GeneradorStates {crear = 0, editar = 1};
 	public GeneradorStates GeneradorState;
-	public GameObject Wall, Floor, Weedy, GloriaBendita, Gloria_Pasa, PutoNombrador;
+	public GameObject Wall, Floor, Weedy, GloriaBendita, Gloria_Pasa, PutoNombrador, Pusher;
 	public GameObject Edita;
 
 	void Start () {
@@ -36,8 +36,17 @@ public class MapFromText : MonoBehaviour {
 		Destroy (objects.GetComponent<MeshRenderer> ());
 
 		if (INvalues != "") {
-			string[] objs = INvalues.Split (",".ToCharArray ());
+			string[] strs = INvalues.Split (",".ToCharArray ());
+			int i = 0;
+			string[] objs = new string[strs.Length];
+			string[] types = new string[strs.Length];
+			foreach (string s in strs) {
+				objs[i] = s.Split(".".ToCharArray())[0];
+				types[i] = s.Split(".".ToCharArray())[1];
+				i++;
+			}
 
+			i = 0;
 			foreach (string s in objs) {
 				if (GeneradorState == GeneradorStates.crear) {
 					switch (s) {
@@ -76,14 +85,23 @@ public class MapFromText : MonoBehaviour {
 					case "5":
 						GameObject obj5 = Instantiate (PutoNombrador);
 						obj5.transform.position = new Vector3 (x * size.x, y * size.y, 0);
-						obj5.GetComponent<SpriteRenderer> ().sortingOrder = -1;
 						obj5.name = "Coin";
 						obj5.transform.parent = objects.transform;
+						break;
+					case "6":
+						GameObject obj6 = Instantiate (Pusher);
+						obj6.transform.position = new Vector3 (x * size.x, y * size.y, 0);
+						obj6.name = "Pusher";
+						obj6.GetComponent<Pusher>().facing = (global::Pusher.Faces)int.Parse(types[i]);
+						obj6.transform.parent = objects.transform;
 						break;
 					default:
 						Debug.Log ("'" + s + "' no reconocido");
 						break;
 					}
+					GameObject f = Instantiate (Floor);
+					f.transform.position = new Vector3 (x * size.x, y * size.y, 0);
+					f.transform.parent = walls.transform;
 					x++;
 					if (x > 4) {
 						x = 0;
@@ -111,6 +129,10 @@ public class MapFromText : MonoBehaviour {
 					case "5":
 						obj.GetComponent<EditaModule> ().block = 5;
 						break;
+					case "6":
+						obj.GetComponent<EditaModule> ().block = 6;
+						obj.GetComponent<EditaModule> ().type = int.Parse(types[i]);
+						break;
 					default:
 						break;
 					}
@@ -122,6 +144,7 @@ public class MapFromText : MonoBehaviour {
 						y++;
 					}
 				}
+				i++;
 			}
 			if (GeneradorState == GeneradorStates.crear){
 				//SyncStart

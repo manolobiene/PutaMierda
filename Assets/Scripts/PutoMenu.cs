@@ -25,6 +25,13 @@ public class PutoMenu : MonoBehaviour {
 	void OnGUI () {
 		switch (MenuState) {
 		case MenuStates.selectMode:
+			if (!GetComponents<AudioSource>()[3].isPlaying){
+				GetComponents<AudioSource>()[0].Stop();
+				GetComponents<AudioSource>()[3].Play();
+			}
+			if (GetComponent<OnEditing>().enabled == true){
+				GetComponent<OnEditing>().enabled = false;
+			}
 			if (GetComponent<WWWmaps>().enabled == true){
 				GetComponent<WWWmaps>().enabled = false;
 			}
@@ -37,21 +44,43 @@ public class PutoMenu : MonoBehaviour {
 			}
 			break;
 		case MenuStates.editor:
-			if (Camera.main.rect != new Rect(0, 0, 1, 1))
-				Camera.main.rect = new Rect(0, 0, 1, 1);
+			if (!GetComponents<AudioSource>()[3].isPlaying){
+				GetComponents<AudioSource>()[0].Stop();
+				GetComponents<AudioSource>()[3].Play();
+			}
+			if (GetComponent<OnEditing>().enabled == true){
+				GetComponent<OnEditing>().enabled = false;
+			}
 			if (GetComponent<WWWmaps>().enabled == false){
 				GetComponent<WWWmaps>().enabled = true;
 			}
 			break;
 		case MenuStates.tabla:
+			if (!GetComponents<AudioSource>()[3].isPlaying){
+				GetComponents<AudioSource>()[0].Stop();
+				GetComponents<AudioSource>()[3].Play();
+			}
+			if (GetComponent<OnEditing>().enabled == true){
+				GetComponent<OnEditing>().enabled = false;
+			}
 			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Volver")){
 				Application.LoadLevel("Menu");
 				Destroy(gameObject);
 			}
 			break;
 		case MenuStates.idle:
-			if (Camera.main.rect != new Rect(0, 0, 1, 1))
-				Camera.main.rect = new Rect(0, 0, 1, 1);
+			if (!GetComponents<AudioSource>()[0].isPlaying){
+				GetComponents<AudioSource>()[3].Stop();
+				GetComponents<AudioSource>()[0].Play();
+			}
+			if (GetComponent<OnEditing>().enabled == true){
+				GetComponent<OnEditing>().enabled = false;
+			}
+			if (GameObject.Find ("map")){
+				if (GameObject.Find("map").transform.localScale != new Vector3 (1,1,1)){
+					GameObject.Find("map").transform.localScale = new Vector3 (1,1,1);
+				}
+			}
 			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Volver")){
 				Destroy(GameObject.Find("Generator"));
 				Destroy(GameObject.Find ("map"));
@@ -65,8 +94,19 @@ public class PutoMenu : MonoBehaviour {
 			}
 			break;
 		case MenuStates.editing:
-			if (Camera.main.rect != new Rect(0.05f, 0.1f, 0.9f, 1))
-				Camera.main.rect = new Rect(0.05f, 0.1f, 0.9f, 1);
+			if (!GetComponents<AudioSource>()[3].isPlaying){
+				GetComponents<AudioSource>()[0].Stop();
+				GetComponents<AudioSource>()[3].Play();
+			}
+			if (GetComponent<OnEditing>().enabled == false){
+				GetComponent<OnEditing>().enabled = true;
+			}
+			if (GameObject.Find ("map")){
+				if (GameObject.Find("map").transform.localScale != new Vector3 (.8f,.8f,1)){
+					GameObject.Find("map").transform.localScale = new Vector3 (.8f,.8f,1);
+					GameObject.Find("map").transform.position = new Vector3(0,2,0); 
+				}
+			}
 			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Salir")){
 				Destroy(GameObject.Find("Generator"));
 				Destroy(GameObject.Find ("map"));
@@ -100,7 +140,7 @@ public class PutoMenu : MonoBehaviour {
 			if (values != ""){
 				values += ",";
 			}
-			values += g.GetComponent<EditaModule>().block.ToString();
+			values += g.GetComponent<EditaModule>().block.ToString() + "." + g.GetComponent<EditaModule>().type.ToString();
 		}
 		string str = PlayerPrefs.GetString("maps");
 		string newmaps = "";
@@ -137,6 +177,7 @@ public class PutoMenu : MonoBehaviour {
 			newmaps = PlayerPrefs.GetString ("SelectedMap") + ":" + values;
 		}
 		PlayerPrefs.SetString ("maps", newmaps);
+		Debug.Log (PlayerPrefs.GetString ("maps"));
 		GetComponent<WWWmaps>().StartCoroutine("SendMaps");
 		Destroy(GameObject.Find ("map"));
 		Destroy(GameObject.Find ("Generator"));

@@ -5,6 +5,7 @@ public class WWWmaps : MonoBehaviour {
 	string[] maps = new string[1];
 	string[] values = new string[1];
 	string[] objs = new string[1];
+	string[] types = new string[1];
 	Texture2D[] mapsT = new Texture2D[16];
 	float posy;
 	Vector3 storedMouse;
@@ -144,7 +145,15 @@ public class WWWmaps : MonoBehaviour {
 	}
 
 	Texture2D MapImage (string INvalues) {
-		objs = INvalues.Split (",".ToCharArray ());
+		string[] strs = INvalues.Split (",".ToCharArray ());
+		int i = 0;
+		objs = new string[strs.Length];
+		types = new string[strs.Length];
+		foreach (string s in strs) {
+			objs[i] = s.Split(".".ToCharArray())[0];
+			types[i] = s.Split(".".ToCharArray())[1];
+			i++;
+		}
 		int x = 0;
 		int y = 0;
 		int a = 0;
@@ -169,6 +178,9 @@ public class WWWmaps : MonoBehaviour {
 			case "5":
 				cols[a] = Color.green;
 				break;
+			case "6":
+				cols[a] = Color.cyan;
+				break;
 			default:
 				Debug.Log ("'" + s + "' no reconocido");
 				break;
@@ -189,9 +201,7 @@ public class WWWmaps : MonoBehaviour {
 	void Update () {
 		if (Input.touchCount == 0) {
 			storedMouse = Vector3.zero;
-			GUI.enabled = true;
 		} else {
-			GUI.enabled = false;
 			if (storedMouse == Vector3.zero) {
 				storedMouse = Input.mousePosition;
 			} else {
