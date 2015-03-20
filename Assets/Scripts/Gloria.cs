@@ -36,6 +36,7 @@ public class Gloria : MonoBehaviour {
 	}
 
 	public void Pasa () {
+		gameObject.name = "Gloria_completed";
 		Camera.main.GetComponents<AudioSource> () [1].Play ();
 		Demolition D = (Demolition)gameObject.AddComponent<Demolition> ();
 		D.DestParticles = DestParticles;

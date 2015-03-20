@@ -5,7 +5,7 @@ public class MapFromText : MonoBehaviour {
 	public enum GeneradorStates {crear = 0, editar = 1};
 	public GeneradorStates GeneradorState;
 	public GameObject Wall, Floor, Weedy, GloriaBendita, Gloria_Pasa, PutoNombrador, Pusher;
-	public GameObject Edita;
+	public GameObject Edita, MapWall;
 	bool available = true;
 
 	public void SyncStart () {
@@ -167,28 +167,28 @@ public class MapFromText : MonoBehaviour {
 				//map limits
 				y = -1;
 				for (int x1 = -1; x1 < 6; x1++){
-					GameObject obj = Instantiate (Wall);
+					GameObject obj = Instantiate (MapWall);
 					obj.name = "wallLIM";
 					obj.transform.position = new Vector3 (x1 * size.x, y * size.y, 0);
 					obj.transform.parent = walls.transform;
 				}
 				y = 8;
 				for (int x1 = -1; x1 < 6; x1++){
-					GameObject obj = Instantiate (Wall);
+					GameObject obj = Instantiate (MapWall);
 					obj.name = "wallLIM";
 					obj.transform.position = new Vector3 (x1 * size.x, y * size.y, 0);
 					obj.transform.parent = walls.transform;
 				}
 				x = -1;
 				for (int y1 = -1; y1 < 9; y1++){
-					GameObject obj = Instantiate (Wall);
+					GameObject obj = Instantiate (MapWall);
 					obj.name = "wallLIM";
 					obj.transform.position = new Vector3 (x * size.x, y1 * size.y, 0);
 					obj.transform.parent = walls.transform;
 				}
 				x = 5;
 				for (int y1 = -1; y1 < 9; y1++){
-					GameObject obj = Instantiate (Wall);
+					GameObject obj = Instantiate (MapWall);
 					obj.name = "wallLIM";
 					obj.transform.position = new Vector3 (x * size.x, y1 * size.y, 0);
 					obj.transform.parent = walls.transform;

@@ -11,7 +11,7 @@ public class MoveLikeCrazy : MonoBehaviour {
 	}
 
 	void Update () {
-		transform.position = Vector3.MoveTowards (transform.position, To, 0.1f);
+		transform.position = Vector3.MoveTowards (transform.position, To, 15f * Time.deltaTime);
 	}
 
 	IEnumerator UpdateGoTo () {

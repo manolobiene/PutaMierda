@@ -25,16 +25,16 @@ public class MenuNube : MonoBehaviour {
 			}
 			if (!Input.GetMouseButton (0)) {
 				for (int i = 0; i < transform.childCount; i++) {
-					Vector3 p = transform.GetChild (i).transform.position;
-					transform.GetChild (i).transform.position = Vector3.MoveTowards (p, new Vector3 (p.x, heights [i], 0), .2f * Time.deltaTime);
+					Vector3 p = transform.GetChild (i).transform.localPosition;
+					transform.GetChild (i).transform.localPosition = Vector3.MoveTowards (p, new Vector3 (p.x, heights [i], 0), .2f * Time.deltaTime);
 				}
 			} else {
 				for (int i = 0; i < transform.childCount; i++) {
-					float x = Camera.main.WorldToScreenPoint (transform.GetChild (i).transform.position).x;
+					float x = Camera.main.WorldToScreenPoint (transform.GetChild (i).transform.localPosition).x;
 					float y = 200 - Mathf.Abs (Mathf.Clamp ((x - Input.mousePosition.x), -200f, 200f));
 					heights [i] = Mathf.Clamp (0.5f - 0.6f * y / 200, -0.4f, 0.4f);
-					Vector3 p = transform.GetChild (i).transform.position;
-					transform.GetChild (i).transform.position = Vector3.Lerp (p, new Vector3 (p.x, heights [i], 0), 0.05f);
+					Vector3 p = transform.GetChild (i).transform.localPosition;
+					transform.GetChild (i).transform.localPosition = Vector3.Lerp (p, new Vector3 (p.x, heights [i], 0), 0.05f);
 				}
 			}
 		}

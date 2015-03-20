@@ -46,6 +46,9 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\FollowObject.cs" />
+     <Compile Include="Assets\FreezeRotation.cs" />
+     <Compile Include="Assets\MouseSmash.cs" />
      <Compile Include="Assets\Scripts\AutoDestruction.cs" />
      <Compile Include="Assets\Scripts\Coin.cs" />
      <Compile Include="Assets\Scripts\DanceTowards.cs" />

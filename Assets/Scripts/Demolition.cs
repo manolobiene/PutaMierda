@@ -7,6 +7,7 @@ public class Demolition : MonoBehaviour {
 
 	void Start () {
 		Destroy (GameObject.Find ("PutaHierba").GetComponent<PutoFood> ());
+		Camera.main.GetComponent<MouseSmash> ().smashMode = MouseSmash.smashModes.destruction;
 		GameObject.Find ("PutaHierba").AddComponent<MoveLikeCrazy> ();
 		foreach (GameObject g in GameObject.FindObjectsOfType (typeof(GameObject))) {
 			if (g.GetComponent<BoxCollider2D>()){
@@ -23,6 +24,7 @@ public class Demolition : MonoBehaviour {
 	void Update () {
 		time -= 1 * Time.deltaTime;
 		if (time < 0) {
+			Camera.main.GetComponent<MouseSmash> ().smashMode = MouseSmash.smashModes.normal;
 			GameObject.Find ("PutaHierba").AddComponent<VictoryDance> ();
 			Destroy (this);
 		}

@@ -5,17 +5,20 @@ public class VictoryDance : MonoBehaviour {
 	Vector3 To;
 
 	void Start () {
+		foreach (GameObject g in GameObject.FindObjectsOfType (typeof(GameObject))) {
+			if (g.GetComponent<BoxCollider2D>()){
+				if (g.layer != LayerMask.NameToLayer("Ignore Raycast")){
+					if (g.name != "Main Camera" && g.name != "Generator" && g.name != "Empty" && g != gameObject){
+						Destroy(g.GetComponent<PunchMe>());
+					}
+				}
+			}
+		}
 		Camera.main.GetComponents<AudioSource>()[6].Stop();
 		Destroy (GetComponent<MoveLikeCrazy> ());
-		float sizex = GetComponent<SpriteRenderer> ().bounds.size.x;
-		float sizey = GetComponent<SpriteRenderer> ().bounds.size.y;
-		int x = (int)(Screen.width / 2 - sizex/2);
-		int y = (int)(Screen.height / 2 - sizey/2);
-		float z = transform.position.z;
-		Vector3 Sp = new Vector3(x,y,0);
-		Vector3 Wp = Camera.main.ScreenToWorldPoint(Sp);
-		Wp = new Vector3(Wp.x,Wp.y,z);
-		To = Wp;
+		Vector3 GP = GameObject.Find ("Gloria_completed").transform.position;
+		Vector3 P = transform.position;
+		To = new Vector3(GP.x, GP.y, P.z);
 	}
 
 	void Update () {
@@ -25,7 +28,7 @@ public class VictoryDance : MonoBehaviour {
 				Camera.main.GetComponents<AudioSource>()[0].Stop();
 				Camera.main.GetComponents<AudioSource>()[4].Play();
 			}
-			transform.position = Vector3.Slerp (transform.position, To, 0.01f);
+			transform.position = Vector3.Slerp (transform.position, To, 2f * Time.deltaTime);
 		} else {
 			if (transform.localScale != new Vector3(0.01f,0.01f,1)){
 				if (!Camera.main.GetComponents<AudioSource>()[5].isPlaying){
@@ -33,8 +36,8 @@ public class VictoryDance : MonoBehaviour {
 					Camera.main.GetComponents<AudioSource>()[4].Stop();
 					Camera.main.GetComponents<AudioSource>()[5].Play();
 				}
-				transform.localScale = Vector3.MoveTowards(transform.localScale, new Vector3(0.01f,0.01f,1), 0.005f);
-				transform.rotation *= Quaternion.Euler(new Vector3(0,0,1));
+				transform.localScale = Vector3.MoveTowards(transform.localScale, new Vector3(0.01f,0.01f,1), 1f * Time.deltaTime);
+				transform.rotation *= Quaternion.Euler(new Vector3(0,0,1)*100*Time.deltaTime);
 			}else{
 				if (!Camera.main.GetComponents<AudioSource>()[1].isPlaying){
 					Camera.main.GetComponents<AudioSource>()[4].Stop();
