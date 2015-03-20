@@ -17,6 +17,8 @@ public class MapFromText : MonoBehaviour {
 				g.name = "Coin_used";
 			}
 			GenMap ();
+			Camera.main.GetComponents<AudioSource>()[3].Stop();
+			Camera.main.GetComponents<AudioSource>()[0].Play();
 		}
 	}
 
@@ -37,6 +39,12 @@ public class MapFromText : MonoBehaviour {
 		walls.transform.parent = parent.transform;
 		walls.name = "walls";
 		Destroy (walls.GetComponent<MeshRenderer> ());
+
+		GameObject floor = GameObject.CreatePrimitive (PrimitiveType.Cube);
+		floor.transform.position = parent.transform.position;
+		floor.transform.parent = parent.transform;
+		floor.name = "floor";
+		Destroy (floor.GetComponent<MeshRenderer> ());
 		
 		GameObject objects = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		objects.transform.position = parent.transform.position;
@@ -67,7 +75,7 @@ public class MapFromText : MonoBehaviour {
 					case "1":
 						GameObject obj1 = Instantiate (Floor);
 						obj1.transform.position = new Vector3 (x * size.x, y * size.y, 0);
-						obj1.transform.parent = walls.transform;
+						obj1.transform.parent = objects.transform;
 						break;
 					case "2":
 						GameObject obj2 = Instantiate (Weedy);
@@ -76,7 +84,7 @@ public class MapFromText : MonoBehaviour {
 						obj2.name = "PutaHierba";
 						obj2 = Instantiate (Floor);
 						obj2.transform.position = new Vector3 (x * size.x, y * size.y, 0);
-						obj2.transform.parent = walls.transform;
+						obj2.transform.parent = objects.transform;
 						break;
 					case "3":
 						GameObject obj4 = Instantiate (Gloria_Pasa);
@@ -110,7 +118,7 @@ public class MapFromText : MonoBehaviour {
 					}
 					GameObject f = Instantiate (Floor);
 					f.transform.position = new Vector3 (x * size.x, y * size.y, 0);
-					f.transform.parent = walls.transform;
+					f.transform.parent = floor.transform;
 					x++;
 					if (x > 4) {
 						x = 0;
@@ -156,6 +164,36 @@ public class MapFromText : MonoBehaviour {
 				i++;
 			}
 			if (GeneradorState == GeneradorStates.crear){
+				//map limits
+				y = -1;
+				for (int x1 = -1; x1 < 6; x1++){
+					GameObject obj = Instantiate (Wall);
+					obj.name = "wallLIM";
+					obj.transform.position = new Vector3 (x1 * size.x, y * size.y, 0);
+					obj.transform.parent = walls.transform;
+				}
+				y = 8;
+				for (int x1 = -1; x1 < 6; x1++){
+					GameObject obj = Instantiate (Wall);
+					obj.name = "wallLIM";
+					obj.transform.position = new Vector3 (x1 * size.x, y * size.y, 0);
+					obj.transform.parent = walls.transform;
+				}
+				x = -1;
+				for (int y1 = -1; y1 < 9; y1++){
+					GameObject obj = Instantiate (Wall);
+					obj.name = "wallLIM";
+					obj.transform.position = new Vector3 (x * size.x, y1 * size.y, 0);
+					obj.transform.parent = walls.transform;
+				}
+				x = 5;
+				for (int y1 = -1; y1 < 9; y1++){
+					GameObject obj = Instantiate (Wall);
+					obj.name = "wallLIM";
+					obj.transform.position = new Vector3 (x * size.x, y1 * size.y, 0);
+					obj.transform.parent = walls.transform;
+				}
+				//...
 				//SyncStart
 				foreach (GameObject g in GameObject.FindGameObjectsWithTag ("GloriaVendita")){
 					Debug.Log (g);

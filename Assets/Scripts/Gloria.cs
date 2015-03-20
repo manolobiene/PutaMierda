@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Gloria : MonoBehaviour {
+	public GameObject DestParticles;
 	int points = 0;
 
 	void OnGUI () {
@@ -35,7 +36,9 @@ public class Gloria : MonoBehaviour {
 	}
 
 	public void Pasa () {
-		Destroy(GameObject.Find ("map"));
-		Camera.main.GetComponent<PutoMenu> ().MenuState = PutoMenu.MenuStates.editor;
+		Camera.main.GetComponents<AudioSource> () [1].Play ();
+		Demolition D = (Demolition)gameObject.AddComponent<Demolition> ();
+		D.DestParticles = DestParticles;
+		Destroy (this);
 	}
 }

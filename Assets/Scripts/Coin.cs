@@ -14,6 +14,6 @@ public class Coin : MonoBehaviour {
 			}
 		}
 		gameObject.name = "Coin_used";
-		GetComponent<SpriteRenderer> ().material.color = Color.white;
+		Destroy (gameObject);
 	}
 }

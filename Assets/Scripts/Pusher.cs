@@ -27,8 +27,10 @@ public class Pusher : MonoBehaviour {
 		case Faces.U:
 			RaycastHit2D hit = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + size/2+0.001f), Vector2.up);
 			if (hit.collider != null){
+				Debug.Log (hit.collider);
 				if (hit.collider.gameObject.GetComponent<Rigidbody2D>()){
 					hit.collider.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector3.up*0.6f, ForceMode2D.Impulse);
+					hit.collider.gameObject.GetComponent<Rigidbody2D>().angularVelocity = 0;
 				}
 			}
 			break;
@@ -37,6 +39,7 @@ public class Pusher : MonoBehaviour {
 			if (hit1.collider != null){
 				if (hit1.collider.gameObject.GetComponent<Rigidbody2D>()){
 					hit1.collider.gameObject.GetComponent<Rigidbody2D>().AddForce(-Vector3.up*0.6f, ForceMode2D.Impulse);
+					hit1.collider.gameObject.GetComponent<Rigidbody2D>().angularVelocity = 0;
 				}
 			}
 			break;
@@ -44,7 +47,6 @@ public class Pusher : MonoBehaviour {
 			RaycastHit2D hit2 = Physics2D.Raycast(new Vector2(transform.position.x - size/2-0.001f, transform.position.y), -Vector2.right);
 			if (hit2.collider != null){
 				if (hit2.collider.gameObject.GetComponent<Rigidbody2D>()){
-					Debug.Log (hit2.collider);
 					hit2.collider.gameObject.GetComponent<Rigidbody2D>().AddForce(-Vector3.right*0.6f, ForceMode2D.Impulse);
 					hit2.collider.gameObject.GetComponent<Rigidbody2D>().angularVelocity = 0;
 				}
@@ -55,6 +57,7 @@ public class Pusher : MonoBehaviour {
 			if (hit3.collider != null){
 				if (hit3.collider.gameObject.GetComponent<Rigidbody2D>()){
 					hit3.collider.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector3.right*0.6f, ForceMode2D.Impulse);
+					hit3.collider.gameObject.GetComponent<Rigidbody2D>().angularVelocity = 0;
 				}
 			}
 			break;

@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: e5a1aff1332200c4299b722e5dc03ec3
+timeCreated: 1426856181
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - DestParticles: {fileID: 148778, guid: 69777cb4b6b25f84898565b095d784df, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

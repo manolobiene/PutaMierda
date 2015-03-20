@@ -1,13 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PutoJoder.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Demolition.cs">
     <Files>
-      <File FileName="Assets\Scripts\MenuNube.cs" Line="14" Column="88" />
-      <File FileName="Assets\InteractiveButton.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PutoJoder.cs" Line="14" Column="71" />
-      <File FileName="Assets\Scripts\MapFromText.cs" Line="17" Column="26" />
-      <File FileName="Assets\Scripts\PutoMenu.cs" Line="88" Column="75" />
-      <File FileName="Assets\Scripts\Gloria.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Gloria.cs" Line="42" Column="18" />
+      <File FileName="Assets\Scripts\Demolition.cs" Line="27" Column="19" />
+      <File FileName="Assets\Scripts\PunchMe.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MapFromText.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Coin.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

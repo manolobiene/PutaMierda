@@ -69,19 +69,17 @@ public class WWWmaps : MonoBehaviour {
 	}
 
 	public IEnumerator SendMaps () {
-		for (int i = 0; i < 2; i++) {
-			Debug.Log ("SENDING: " + PlayerPrefs.GetString ("maps"));
-			WWWForm form = new WWWForm ();
-			form.AddField ("mode", "setMaps");
-			form.AddField ("maps", PlayerPrefs.GetString ("maps"));
-			form.AddField ("identification", PlayerPrefs.GetString ("identification"));
-			byte[] data = form.data;
+		Debug.Log ("SENDING: " + PlayerPrefs.GetString ("maps"));
+		WWWForm form = new WWWForm ();
+		form.AddField ("mode", "setMaps");
+		form.AddField ("maps", PlayerPrefs.GetString ("maps"));
+		form.AddField ("identification", PlayerPrefs.GetString ("identification"));
+		byte[] data = form.data;
 
-			WWW download = new WWW (PlayerPrefs.GetString ("URL"), data);
-			yield return download;
-			Debug.Log (download.text);
-			yield return null;
-		}
+		WWW download = new WWW (PlayerPrefs.GetString ("URL"), data);
+		yield return download;
+		Debug.Log (download.text);
+		yield return new WaitForSeconds(1);
 		StartCoroutine ("UpdateData");
 	}
 
@@ -134,6 +132,7 @@ public class WWWmaps : MonoBehaviour {
 		} else {
 			str = PlayerPrefs.GetString("maps");
 		}
+		yield return new WaitForSeconds (1);
 		syncing = false;
 		StartCoroutine("PlayerExists");
 	}

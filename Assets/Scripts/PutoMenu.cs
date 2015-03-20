@@ -48,6 +48,9 @@ public class PutoMenu : MonoBehaviour {
 				GetComponent<WWWmaps>().enabled = true;
 				GetComponent<WWWmaps>().SyncStart();
 			}
+			if (GameObject.Find ("map")){
+				Destroy(GameObject.Find("map"));
+			}
 			GUILayout.BeginArea (new Rect (0, Screen.height * 0.8f, Screen.width, Screen.height * 0.2f));
 			//PlayerPrefs.SetString ("maps", GUILayout.TextArea (PlayerPrefs.GetString ("maps")));
 			if (GUILayout.Button ("Menu", GUILayout.Height(Screen.height*0.15f * 0.8f))) {
@@ -77,10 +80,6 @@ public class PutoMenu : MonoBehaviour {
 			}
 			break;
 		case MenuStates.idle:
-			if (!GetComponents<AudioSource>()[0].isPlaying){
-				GetComponents<AudioSource>()[3].Stop();
-				GetComponents<AudioSource>()[0].Play();
-			}
 			if (GetComponent<OnEditing>().enabled == true){
 				GetComponent<OnEditing>().enabled = false;
 			}
@@ -121,11 +120,13 @@ public class PutoMenu : MonoBehaviour {
 			}
 			if (GUI.Button(new Rect(Screen.width*0.3f,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Guardar")){
 				SaveCustoms();
+				GetComponent<WWWmaps>().StartCoroutine("SendMaps");
 				MenuState = MenuStates.editor;
 			}
 			if (GUI.Button(new Rect(Screen.width-Screen.width*0.3f,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Borrar")){
 				SaveCustoms();
 				DeleteMap();
+				GetComponent<WWWmaps>().StartCoroutine("SendMaps");
 				MenuState = MenuStates.editor;
 			}
 			break;
@@ -184,9 +185,6 @@ public class PutoMenu : MonoBehaviour {
 			newmaps = PlayerPrefs.GetString ("SelectedMap") + ":" + values;
 		}
 		PlayerPrefs.SetString ("maps", newmaps);
-		Debug.Log (PlayerPrefs.GetString ("maps"));
-		GetComponent<WWWmaps>().StartCoroutine("SendMaps");
-		Destroy(GameObject.Find ("map"));
 	}
 
 	void DeleteMap () {
@@ -217,7 +215,5 @@ public class PutoMenu : MonoBehaviour {
 			}
 		}
 		PlayerPrefs.SetString ("maps", newmaps);
-		GetComponent<WWWmaps>().StartCoroutine("SendMaps");
-		Destroy(GameObject.Find ("map"));
 	}
 }

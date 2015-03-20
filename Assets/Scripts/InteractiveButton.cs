@@ -17,25 +17,36 @@ public class InteractiveButton : MonoBehaviour {
 	}
 
 	void Update () {
+		if (Camera.main.GetComponent<PutoMenu> ().MenuState != PutoMenu.MenuStates.selectMode) {
+			if (gameObject.layer != LayerMask.NameToLayer ("Ignore Raycast")){
+				gameObject.layer = LayerMask.NameToLayer ("Ignore Raycast");
+			}
+		} else {
+			if (gameObject.layer != LayerMask.NameToLayer ("UI")){
+				gameObject.layer = LayerMask.NameToLayer ("UI");
+			}
+		}
 		if (state == states.idle) {
-			if (transform.localScale.x > 1.05f) {
-				target = 0.9f;
+			if (Camera.main.GetComponent<PutoMenu> ().MenuState == PutoMenu.MenuStates.selectMode){
+				if (transform.localScale.x > 1.05f) {
+					target = 0.9f;
+				}
+				if (transform.localScale.x < 0.95f) {
+					target = 1.1f;
+				}
+				transform.localScale = Vector3.MoveTowards (transform.localScale, new Vector3 (target, target, 1), 0.1f*Time.deltaTime);
+				Vector3 p = transform.localPosition;
+				float newx = Mathf.Clamp (p.x, oPos.x - 0.5f, oPos.x + 0.5f);
+				float newy = Mathf.Clamp (p.y, oPos.y - 1f, oPos.x + 1f);
+				transform.localPosition = new Vector3 (newx, newy, oPos.z);
+				transform.localPosition = Vector3.MoveTowards (transform.localPosition, oPos, 2f*Time.deltaTime);
 			}
-			if (transform.localScale.x < 0.95f) {
-				target = 1.1f;
-			}
-			transform.localScale = Vector3.MoveTowards (transform.localScale, new Vector3 (target, target, 1), 0.1f*Time.deltaTime);
-			Vector3 p = transform.localPosition;
-			float newx = Mathf.Clamp (p.x, oPos.x - 0.5f, oPos.x + 0.5f);
-			float newy = Mathf.Clamp (p.y, oPos.y - 1f, oPos.x + 1f);
-			transform.localPosition = new Vector3 (newx, newy, oPos.z);
-			transform.localPosition = Vector3.MoveTowards (transform.localPosition, oPos, 2f*Time.deltaTime);
 		}
 		if (state == states.transitionB) {
 			transform.localPosition = Vector3.MoveTowards (transform.localPosition, oPos, 10f*Time.deltaTime);
 			Vector3 cS = transform.GetChild(0).transform.localScale;
 			Vector3 to = new Vector3 (.001f,.001f,1);
-			transform.GetChild(0).transform.localScale = Vector3.MoveTowards(cS, to, 15f*Time.deltaTime);
+			transform.GetChild(0).transform.localScale = Vector3.MoveTowards(cS, to, 10f*Time.deltaTime);
 			Vector3 pos = transform.localPosition;
 			if (Mathf.Abs(pos.x - oPos.x) < .2f && Mathf.Abs(pos.y - oPos.y) < .2f){
 				GetComponent<SpriteRenderer>().sortingLayerName = "Ground";

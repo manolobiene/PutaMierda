@@ -46,13 +46,19 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\InteractiveButton.cs" />
+     <Compile Include="Assets\Scripts\AutoDestruction.cs" />
      <Compile Include="Assets\Scripts\Coin.cs" />
+     <Compile Include="Assets\Scripts\DanceTowards.cs" />
+     <Compile Include="Assets\Scripts\Demolition.cs" />
      <Compile Include="Assets\Scripts\EditaModule.cs" />
      <Compile Include="Assets\Scripts\Gloria.cs" />
+     <Compile Include="Assets\Scripts\InteractiveButton.cs" />
      <Compile Include="Assets\Scripts\MapFromText.cs" />
      <Compile Include="Assets\Scripts\MenuNube.cs" />
+     <Compile Include="Assets\Scripts\MinionGenerator.cs" />
+     <Compile Include="Assets\Scripts\MoveLikeCrazy.cs" />
      <Compile Include="Assets\Scripts\OnEditing.cs" />
+     <Compile Include="Assets\Scripts\PunchMe.cs" />
      <Compile Include="Assets\Scripts\Pusher.cs" />
      <Compile Include="Assets\Scripts\PutaDesconexion.cs" />
      <Compile Include="Assets\Scripts\PutoFood.cs" />
@@ -61,6 +67,7 @@
      <Compile Include="Assets\Scripts\PutoMenu.cs" />
      <Compile Include="Assets\Scripts\PutoPervive.cs" />
      <Compile Include="Assets\Scripts\PutoScript.cs" />
+     <Compile Include="Assets\Scripts\VictoryDance.cs" />
      <Compile Include="Assets\Scripts\WWWmaps.cs" />
      <Compile Include="Assets\Scripts\WWWtexture.cs" />
      <None Include="Assets\Plugins\AndroidManifest.xml" />
