@@ -13,6 +13,9 @@ public class MapFromText : MonoBehaviour {
 			Destroy(GameObject.Find ("map"));
 		if (available) {
 			available = false;
+			foreach (GameObject g in GameObject.FindGameObjectsWithTag ("Coin")){
+				g.name = "Coin_used";
+			}
 			GenMap ();
 		}
 	}
@@ -155,12 +158,7 @@ public class MapFromText : MonoBehaviour {
 			if (GeneradorState == GeneradorStates.crear){
 				//SyncStart
 				foreach (GameObject g in GameObject.FindGameObjectsWithTag ("GloriaVendita")){
-					if (g.GetComponent<Coin>() != null){
-						g.GetComponent<Coin>().SyncStart();
-					}
-					if (g.GetComponent<PutoJoder>() != null){
-						g.GetComponent<PutoJoder>().SyncStart();
-					}
+					Debug.Log (g);
 					if (g.GetComponent<Gloria>() != null){
 						g.GetComponent<Gloria>().SyncStart();
 					}

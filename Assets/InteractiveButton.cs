@@ -46,7 +46,7 @@ public class InteractiveButton : MonoBehaviour {
 		if (state == states.transitionF) {
 			transform.localPosition = Vector3.Slerp (transform.localPosition, transitionPos, 3f*Time.deltaTime);
 			Vector3 cS = transform.GetChild(0).transform.localScale;
-			Vector3 to = new Vector3 (4,4,1);
+			Vector3 to = new Vector3 (2,2,1);
 			transform.GetChild(0).transform.localScale = Vector3.MoveTowards(cS, to, 5f*Time.deltaTime);
 		}
 	}

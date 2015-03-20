@@ -85,8 +85,8 @@ public class PutoMenu : MonoBehaviour {
 				GetComponent<OnEditing>().enabled = false;
 			}
 			if (GameObject.Find ("map")){
-				if (GameObject.Find("map").transform.localScale != new Vector3 (1,1,1)){
-					GameObject.Find("map").transform.localScale = new Vector3 (1,1,1);
+				if (GameObject.Find("map").transform.localScale != new Vector3 (.7f,.7f,1)){
+					GameObject.Find("map").transform.localScale = new Vector3 (.7f,.7f,1);
 				}
 			}
 			if (GUI.Button(new Rect(0,Screen.height*0.95f,Screen.width*0.3f,Screen.height*0.05f), "Volver")){

@@ -64,7 +64,6 @@ public class WWWmaps : MonoBehaviour {
 			}
 			GUILayout.EndArea ();
 		} else {
-			Debug.Log ("sss");
 			GUI.Box(new Rect(0,0,Screen.width,Screen.height), "Sincronizando");
 		}
 	}
